@@ -15,6 +15,6 @@ boolean to indicate if date is in the format of YYYY-MM-DD
 Checks the input date if it's proper format.
 }
 \details{
-This functions return TRUE if the date for format, otherwise FALSE
+This functions return TRUE if the date for format, otherwise error messages
 }
 

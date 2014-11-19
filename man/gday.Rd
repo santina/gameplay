@@ -12,7 +12,8 @@ gday(date = Sys.Date(), team = "canucks")
 string Name of the channel to watch. Return "information not available for this date"
 if the NHL server cannot provide information for the given date.
 Returns "not available" if the team is #' not playing on the current day,
-"undecided" if the team is playing but the channel name #' is not available on nhl
+"undecided or not available" if the team is playing but the channel name
+is not specified on NHL
 }
 \description{
 Is it the game day of your favorite team?
