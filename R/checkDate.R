@@ -2,18 +2,15 @@
 #'
 #' Checks the input date if it's proper format.
 #'
-#' This functions return TRUE if the date for format
+#' This functions return TRUE if the date for format, otherwise error messages
 #'
 #' @param date The string we wish to check if it's a proper date format
 #' @return boolean to indicate if date is in the format of YYYY-MM-DD
-#' @note When \code{date} is ignored it will return FALSE
-#' @examples
-#' checkDate("")
-#' checkDate("2014-11-17") # return TRUE
-#' checkDate("2014November17th") # return FALSE
+# @note When \code{date} is ignored it will return FALSE
 
 
-checkDate  <- function(date){
+
+checkDate  <- function(date = Sys.Date()){
 
 	dateArray <- strsplit(as.character(date), "-")
 

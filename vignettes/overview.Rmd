@@ -9,55 +9,76 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-learned and made this! 
+This package extracts information from the NHL server and provide the information the user needs using either `gday()` or `score()`. The former returns the broadcaster name if the team is playing, and the latter returns a data frame containing the information about the game (if given) or all the games on the current day. 
 
-made some changes 
-below is some text from the default 
+More functions will be added to this package (once I have more time), which will allow more functionalities and processing of the data queried from the NHL server. 
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+This is also my first R package. Though minimum but fully functional and a great learning opportunity. 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+## Using the functions 
 
-## Vignette Info
+Both `gday()` and `score()` have default parameters. `gday()` assumes its parameter `team` is "canucks" if no input is given. `score()` takes in two parameters, `team` and `date`, in such order. 
 
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+The default value for the date for both functions is the current date (`Sys.Date()`) and the team is set to default. 
 
-## Styles
+In `score()` When `team` is not given as an input, the function returns all the games playing on that date. If `team` is given, it will check if it is in the list of the games on that date and return the game information. If the input team is not playing, it will simply return a data.frame of all the games on the current day.
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+Some examples: 
+```{r}
+library(gameplay)
+gday(date = "2014-11-18", team = "KINGS") # returns the broadcaster name for Oilers 
+gday(team = "Dubai") # return "not playing" since Dubai isn't in the NHL
+gday(date = "2014-11-19") # check for Canucks, which is playing on Nov 19, 2014
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Error handling 
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+The date format has to be in the specific format of `YYYY-MM-DD`, and need to be in numbers and in quote.  This check is performed at the start of both functions `gday()` and `score()` to ensure proper handling of the inputs. 
+If the date is not an acceptable format, it will throw one of the two different errors.
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+Examples (try running the commented-out code)
+```{r}
+# detects improper length 
+#gday(date = "2014-111-18") 
+# detects not all date components are numbers
+#score(date = "2014-No-18") 
 ```
 
-Also a quote using `>`:
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+And if date such as "1111-12-31", `gday()` and `score()` will handle the situation when NHL server returns 404 error. 
+Examples: 
+```{r}
+gday(date = "2022-11-18") 
+score(date = "1700-11-18")
+```
+
+
+## Challenges I found
+
+Though this first version of the package seems short, it took me forever to figure out some of the really important thing in building R package. I'm listing them out here as notes to (future) self and perhaps others. 
+
+### devtools::check() is independent of your environment 
+That said, it could throw you  errors that you otherwise would not see because of the libraries exist in your current R studio environment has enabled you to run your functions. So for example, if you don't specify the libraries such as `RCurl` in DESCRIPTION, it would not know what `getURL()` function is. 
+
+So you need to add `RCurl` under `Imports` (there's an s) in your DESCRIPTION. Moreover, make sure you specify the library when calling any non-base function. I.e., always say something like `RCurl::getURL()` instead of just `getURL()` in your exported functions. 
+
+### Libraries in DESCRIPTION 
+A common practice is to have all the libraries that are required to run the functions in the `R` directory __and knitting the vignettes markdown__ in the package directory, under `Imports` in DESCRIPTION. 
+
+Under `Depends` it is usually just the version of the R. 
+
+[Correct me](santina424@gmail.com) if I'm wrong. 
+
+### Helper functions 
+The R scripts that act as helper functions to the exported functions don't need to have documentation like the exported functions do. If you do have documentations that prompt `document()` to generate .Rd files for them, don't have example at the end since `devtools::test()` would complain that they're not found (since they're not exported). Only exported functions need documentations and examples. 
+
+If you really want to "document" the helper functions, just use `#` instead of `#'` to write comments. 
+
+
+## Reflection
+
+This was overall a good learning experience. I felt like I didn't write as much code given the time I spent on it... Most of the time were spent on understanding the workflow of building R packages and the magic behinds the functions in devtools. 
+
+Given now I know how to do this, I think it'd be helpful to write my own functions and include them in a package for repetitive use, such as in a research setting or whatever.  For example, if the next 5 assignments are about graphing gapminde, I'd write a package that is designed specifically for spitting out graphs. 
+
+It's also great that we have sorted seen how getting informatino from the web works. 

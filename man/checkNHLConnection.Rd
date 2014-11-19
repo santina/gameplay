@@ -19,7 +19,4 @@ If it's false, it means either the internet connection is not available or
 the NHL server is down... though not likely cuz they can't afford that downtime!
 (remember to pay your internet bill)
 }
-\examples{
-checkNHLConnection()
-}
 

@@ -3,13 +3,16 @@
 \alias{gday}
 \title{Documentation}
 \usage{
-gday(team = "canucks")
+gday(date = Sys.Date(), team = "canucks")
 }
 \arguments{
 \item{team}{The name of your team or the city of the team.}
 }
 \value{
-string Name of the channel to watch
+string Name of the channel to watch. Return "information not available for this date"
+if the NHL server cannot provide information for the given date.
+Returns "not available" if the team is #' not playing on the current day,
+"undecided" if the team is playing but the channel name #' is not available on nhl
 }
 \description{
 Is it the game day of your favorite team?
@@ -26,6 +29,5 @@ was written by someone in Vancouver
 }
 \examples{
 gday() # check for "Canucks"
-gday("Bruins")
 }
 

@@ -3,7 +3,7 @@
 \alias{checkDate}
 \title{Documentation}
 \usage{
-checkDate(date)
+checkDate(date = Sys.Date())
 }
 \arguments{
 \item{date}{The string we wish to check if it's a proper date format}
@@ -15,14 +15,6 @@ boolean to indicate if date is in the format of YYYY-MM-DD
 Checks the input date if it's proper format.
 }
 \details{
-This functions return TRUE if the date for format
-}
-\note{
-When \code{date} is ignored it will return FALSE
-}
-\examples{
-checkDate("")
-checkDate("2014-11-17") # return TRUE
-checkDate("2014November17th") # return FALSE
+This functions return TRUE if the date for format, otherwise FALSE
 }
 

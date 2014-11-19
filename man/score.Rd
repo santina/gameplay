@@ -8,8 +8,7 @@ score(date = Sys.Date(), team = NULL)
 \arguments{
 \item{date}{The scores of the date you want to search for. format: YYYY-MM-DD}
 
-\item{team}{The team of your interest. If it's playing as indicated by gday(),
-the function will return the score information of both the team and its rival team.}
+\item{team}{The team of your interest, can the team's city name, too.}
 }
 \value{
 data.frame If connection to live.nhle.com is successful and
@@ -27,6 +26,9 @@ as available on live.nhle.com.
 When \code{date} is ignored it will check for \code{Sys.Date()},
 and if \code{team} is ignored, the function will return all the teams playing on
 the given day.
+If the input team playing, the function will return the score information of both the team and its rival team.
+If the input team is not playing, the function prints "The team isn't playing today"
+and returns a data frame of all the games going on today.
 The function also throw errors when date format is not proper or
 information are not avaiable for certain date.
 \code{team} can be either the name of the team or the city names
