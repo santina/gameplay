@@ -3,29 +3,29 @@
 \alias{gday}
 \title{Documentation}
 \usage{
-gday(team.name = "canucks")
+gday(team = "canucks")
 }
 \arguments{
-\item{team.name}{The name of your team}
+\item{team}{The name of your team or the city of the team.}
 }
 \value{
-logical \code{TRUE} if \code{team.name} has a NHL game today
-\code{FALSE} otherwise
+string Name of the channel to watch
 }
 \description{
-Is it Gameday?
+Is it the game day of your favorite team?
 }
 \details{
-This function returns TRUE if your NHL team plays today
-and FALSE otherwise
+This function will tell you which channel to watch if your team is playing,
+otherwise it tells you to wait for a few more days
 
 Now here's the input
 }
 \note{
-case in \code{team.name} is ignored it will check for Canucks
+case in \code{team} is ignored it will check for Canucks because this package
+was written by someone in Vancouver
 }
 \examples{
-gday("canucks")
+gday() # check for "Canucks"
 gday("Bruins")
 }
 
