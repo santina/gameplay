@@ -8,29 +8,43 @@
 #' Now here's the input
 #'
 #' @param team The name of your team or the city of the team.
-#' @return string Name of the channel to watch
+#' @return string Name of the channel to watch. Return "information not available for this date"
+#' if the NHL server cannot provide information for the given date.
+#' Returns "not available" if the team is #' not playing on the current day,
+#' "undecided or not available" if the team is playing but the channel name
+#' is not specified on NHL
 #' @note case in \code{team} is ignored it will check for Canucks because this package
 #' was written by someone in Vancouver
+#'
 #' @export
 #' @examples
 #' gday() # check for "Canucks"
-#' gday("Bruins")
+
 
 #source("checkDate.R")
 #source("checkNHLConnection.R")
-gday <- function(team="canucks") {
-	source("checkDate.R")
-	source("checkNHLConnection.R")
+gday <- function(date = Sys.Date(), team="canucks") {
+
+	# check date, throw erros and stop the function if it's not correct
+	checkDate(date)
+
+
 	if(!checkNHLConnection()){
 		stop("Cannot connect to NHL server :(  Try checking your internet, too.")
 	}
-	url <- paste0("http://live.nhle.com/GameData/GCScoreboard/", Sys.Date(), ".jsonp")
-    #"http://live.nhle.com/GameData/GCScoreboard/2014-11-10.jsonp"
-  good <- grepl(team, getURL(url), ignore.case=TRUE) # relies on RCurl package
 
-  if(!good){
-  	stop("sorry " + team +  "isn't playing today. Wait a few more days, or you can use" +
-  			 	"score(date, team) to see if your team is playing on that date")
+
+	url <- paste0("http://live.nhle.com/GameData/GCScoreboard/", date, ".jsonp")
+    #"http://live.nhle.com/GameData/GCScoreboard/2014-11-10.jsonp"
+  good <- grepl(team, RCurl::getURL(url), ignore.case=TRUE) # relies on RCurl package
+
+	unavailable <- grepl("404 Not Found", RCurl::getURL(url))
+
+	if(unavailable){
+		channel <- "information not available for this date"
+	}
+  else if(!good){
+  	channel <- "not playing"
   }
   else{
 
@@ -38,7 +52,10 @@ gday <- function(team="canucks") {
   	# this parsing code was taken from the homework instruction page
   	json <- gsub('([a-zA-Z_0-9\\.]*\\()|(\\);?$)', "", raw, perl = TRUE)
 
-  	# for whatever reason the server doesn't return any info even though it's running
+  	# for whatever reason the server doesn't return any info
+  	# or changes its JSON format
+
+  	data <- jsonlite::fromJSON(json)$games
   	tryCatch({
   		data <- jsonlite::fromJSON(json)$games
   		},
@@ -66,7 +83,7 @@ gday <- function(team="canucks") {
   	}
   }
 	if (nchar(channel) == 0){
-		channel  <- "undecided"
+		channel  <- "undecided or not available"
 	}
 
 	channel
