@@ -8,6 +8,10 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
+```{r setup, include = FALSE, cache = FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
 
 This package extracts information from the NHL server and provide the information the user needs using either `gday()` or `score()`. The former returns the broadcaster name if the team is playing, and the latter returns a data frame containing the information about the game (if given) or all the games on the current day. 
 
