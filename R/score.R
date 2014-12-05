@@ -45,11 +45,13 @@ score <- function(date = Sys.Date(), team = NULL) {
 	else{
 		# this parsing code was taken from the homework instruction page
 		json <- gsub('([a-zA-Z_0-9\\.]*\\()|(\\);?$)', "", raw, perl = TRUE)
+		data <- jsonlite::fromJSON(json)$games
 		result <- with(data,
 									 data.frame(home = paste(htn, htcommon),
 									 					 away = paste(atn, atcommon),
 									 					 home_score = hts,
 									 					 away_score = ats))
+
 		if (!identical(team, NULL)){
 			good <- grepl(team, RCurl::getURL(url), ignore.case=TRUE)
 			if(good){
