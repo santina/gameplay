@@ -2,7 +2,7 @@ Package: gameplay
 Title: tell you if NHL team has a game today
 Version: 0.0.1
 Authors@R: "Santina Lin <santina424@gmail.com> [aut, cre]"
-Description: Auery live.nhle.com to check if your NHL team is listed
+Description: Query live.nhle.com to check if your NHL team is listed
     on the teams that play today
 Depends:
     R (>= 3.1.1)
